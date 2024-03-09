@@ -26,7 +26,7 @@ tasks.withType<JavaCompile> {
 }
 
 dependencies {
-    implementation("net.botwithus.rs3:botwithus-api:1.0.0-20240307.072330-24")
+    implementation("net.botwithus.rs3:botwithus-api:1.0.0-20240309.060924-27")
     implementation("net.botwithus.xapi.public:api:1.0.0-20240211.205614-15")
     "includeInJar"("net.botwithus.xapi.public:api:1.0.0-20240211.205614-15")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")

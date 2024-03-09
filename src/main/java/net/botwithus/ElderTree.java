@@ -9,6 +9,9 @@ import net.botwithus.rs3.game.*;
 import net.botwithus.rs3.game.actionbar.ActionBar;
 import net.botwithus.rs3.game.hud.interfaces.Component;
 import net.botwithus.rs3.game.hud.interfaces.Interfaces;
+import net.botwithus.rs3.game.movement.Movement;
+import net.botwithus.rs3.game.movement.NavPath;
+import net.botwithus.rs3.game.movement.TraverseEvent;
 import net.botwithus.rs3.game.queries.builders.characters.NpcQuery;
 import net.botwithus.rs3.game.queries.builders.components.ComponentQuery;
 import net.botwithus.rs3.game.queries.builders.items.InventoryItemQuery;
@@ -25,6 +28,8 @@ import net.botwithus.rs3.script.config.ScriptConfig;
 import net.botwithus.rs3.*;
 import net.botwithus.rs3.util.Regex;
 
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,6 +48,9 @@ public class ElderTree extends LoopingScript {
     public   int logsperhour =0;
 
     private Area VarRock = new Area.Rectangular(new Coordinate(3236, 3371,0), new Coordinate(3234, 3364,0));
+    private Area VarrockTree = new Area.Rectangular(new Coordinate(3256,3372,0), new Coordinate(3258,3367,0));
+    private Area FortTree = new Area.Rectangular(new Coordinate(3375,3545,0), new Coordinate(3373,3540,0));
+    private Area FaladorTree = new Area.Rectangular(new Coordinate(3061,3318,0), new Coordinate(3059,3315,0));
     private Area Fort = new Area.Rectangular(new Coordinate(3347,3542,0), new Coordinate(3351,3547,0));
     private Area Falador2 = new Area.Rectangular(new Coordinate(3061,3318,0), new Coordinate(3059,3315,0));
 
@@ -233,7 +241,76 @@ public class ElderTree extends LoopingScript {
             return random.nextLong(1000,2000);
         }
 
-        if(player.getCoordinate().getRegionId() == 13111)
+        if(Movement.traverse(NavPath.resolve(FortTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED){
+                SceneObject tree1 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+
+                if(VarManager.getVarbitValue(52992) == 15)
+                {
+                   println("Teleporting to VarRock");
+                    if(Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED)
+                    {
+                        SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                        if(VarManager.getVarbitValue(20603) == 1)
+                        {
+                             println("Teleporting to Draynor Village");
+                            if(Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED)
+                            {
+                                SceneObject tree2 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                                if(VarManager.getVarbitValue(20600) == 1)
+                                {
+                                    Lodestone.FORT_FORINTHRY.teleport();
+                                    println("Teleporting to Fort Elder Tree");
+                                }
+                                else if (tree2 != null) {
+                                    println("Interacted tree: " + tree2.interact("Chop down"));
+                                }
+                            }
+                        }
+                        else if (tree != null) {
+                            println("Interacted tree: " + tree.interact("Chop down"));
+                        }
+                    }
+                }
+                else if (tree1 != null) {
+                    println("Interacted tree: " + tree1.interact("Chop down"));
+                }
+            }
+
+
+        /*if(player.getCoordinate() != VarrockTree.getRandomCoordinate())   //Varrock Tree
+        {
+            if(Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED)
+            {
+                SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                if(VarManager.getVarbitValue(20603) == 1)
+                {
+                    Lodestone.DRAYNOR_VILLAGE.teleport();
+                    println("Teleporting to Draynor Village");
+                }
+                else if (tree != null) {
+                    println("Interacted tree: " + tree.interact("Chop down"));
+                }
+            }
+        }*/
+
+       /* if(player.getCoordinate().getRegionId() != 12083) //Falador
+        {
+            if(Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED)
+            {
+                SceneObject tree2 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                if(VarManager.getVarbitValue(20600) == 1)
+                {
+                    Lodestone.FORT_FORINTHRY.teleport();
+                    println("Teleporting to Fort Elder Tree");
+                }
+                else if (tree2 != null) {
+                    println("Interacted tree: " + tree2.interact("Chop down"));
+                }
+            }
+        }*/
+
+/*        if(player.getCoordinate().getRegionId() == 13111)
+
         {
             //Move to Fort Elder Tree area
             Coordinate FortRandom = Fort.getRandomCoordinate();
@@ -242,10 +319,10 @@ public class ElderTree extends LoopingScript {
                assert player !=null;
                return Fort.contains(player.getCoordinate());
             });
-           /* SceneObject move = SceneObjectQuery.newQuery().name("Fairy ring ").results().nearest();
+           *//* SceneObject move = SceneObjectQuery.newQuery().name("Fairy ring ").results().nearest();
             if (move != null) {
                 println("Interacted tree: " + move.interact("Use"));
-            }*/
+            }*//*
         }
         if(player.getCoordinate().getRegionId() == 13367)  // Fort
         {
@@ -258,10 +335,12 @@ public class ElderTree extends LoopingScript {
             if (tree1 != null) {
                 println("Interacted tree: " + tree1.interact("Chop down"));
             }
-        }
+        }*/
 
-        if(player.getCoordinate().getRegionId() == 12339)
-        {
+    /*    if(player.getCoordinate().getRegionId() == 12339)
+        {    if(Movement.traverse(NavPath.resolve(FortTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED){
+
+        }
             Coordinate Falador1Random = Falador1.getRandomCoordinate();
             Travel.walkTo(Falador1Random.getX(),Falador1Random.getY());
             Execution.delayUntil(10000,() -> {
@@ -275,9 +354,9 @@ public class ElderTree extends LoopingScript {
                 assert player !=null;
                 return Falador2.contains(player.getCoordinate());
             });
-        }
+        }*/
 
-        if(player.getCoordinate().getRegionId() == 12083)   //Draynor Elder Tree
+       /* if(player.getCoordinate().getRegionId() == 12083)   //Draynor Elder Tree
         {
             SceneObject tree2 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
             if(VarManager.getVarbitValue(20600) == 1)
@@ -288,10 +367,10 @@ public class ElderTree extends LoopingScript {
             else if (tree2 != null) {
                 println("Interacted tree: " + tree2.interact("Chop down"));
             }
-        }
+        }*/
 
 
-        if(player.getCoordinate().getRegionId() == 12852)   // Varrock
+      /*  if(player.getCoordinate().getRegionId() == 12852)   // Varrock
         {
             SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
             if(tree == null)
@@ -312,10 +391,14 @@ public class ElderTree extends LoopingScript {
                 println("Interacted tree: " + tree.interact("Chop down"));
             }
 
-        }
+        }*/
         return random.nextLong(1500, 3000);
     }
 
+    private void movetoVarrock()
+    {
+
+    }
 
     public int getAdditionalWoodboxCapacity() {
         int level = Skills.WOODCUTTING.getActualLevel();
