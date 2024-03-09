@@ -240,41 +240,51 @@ public class ElderTree extends LoopingScript {
         if (player.getAnimationId() != -1 || player.isMoving()) {
             return random.nextLong(1000,2000);
         }
-
-        if(Movement.traverse(NavPath.resolve(FortTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED){
+        if(VarManager.getVarbitValue(52992) == 3) {
+            if (Movement.traverse(NavPath.resolve(FortTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
                 SceneObject tree1 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
 
-                if(VarManager.getVarbitValue(52992) == 15)
-                {
-                   println("Teleporting to VarRock");
-                    if(Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED)
-                    {
-                        SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
-                        if(VarManager.getVarbitValue(20603) == 1)
-                        {
-                             println("Teleporting to Draynor Village");
-                            if(Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED)
-                            {
-                                SceneObject tree2 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
-                                if(VarManager.getVarbitValue(20600) == 1)
-                                {
-                                    Lodestone.FORT_FORINTHRY.teleport();
-                                    println("Teleporting to Fort Elder Tree");
-                                }
-                                else if (tree2 != null) {
-                                    println("Interacted tree: " + tree2.interact("Chop down"));
-                                }
-                            }
-                        }
-                        else if (tree != null) {
-                            println("Interacted tree: " + tree.interact("Chop down"));
+                if (VarManager.getVarbitValue(52992) == 15) {
+                    println("Teleporting to VarRock");
+                    //Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate()));
+                    Lodestone.VARROCK.teleport();
+                } else if (tree1 != null) {
+                    println("Interacted tree: " + tree1.interact("Chop down"));
+                }
+            } else if (VarManager.getVarbitValue(20603) == 0) {
+                if (Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
+                    SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                    if (VarManager.getVarbitValue(20603) == 1) {
+                        println("Teleporting to Draynor Village");
+                        Lodestone.DRAYNOR_VILLAGE.teleport();
+                        //Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate()));
+                    } else if (tree != null) {
+                        println("Interacted tree: " + tree.interact("Chop down"));
+                    }
+                } else if (VarManager.getVarbitValue(20600) == 0) {
+                    if (Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
+                        SceneObject tree2 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                        if (VarManager.getVarbitValue(20600) == 1) {
+                            Lodestone.FORT_FORINTHRY.teleport();
+                            println("Teleporting to Fort Elder Tree");
+                        } else if (tree2 != null) {
+                            println("Interacted tree: " + tree2.interact("Chop down"));
                         }
                     }
                 }
-                else if (tree1 != null) {
-                    println("Interacted tree: " + tree1.interact("Chop down"));
-                }
             }
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
         /*if(player.getCoordinate() != VarrockTree.getRandomCoordinate())   //Varrock Tree
