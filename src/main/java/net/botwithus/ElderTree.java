@@ -240,6 +240,7 @@ public class ElderTree extends LoopingScript {
         if (player.getAnimationId() != -1 || player.isMoving()) {
             return random.nextLong(1000,2000);
         }
+
         if(VarManager.getVarbitValue(52992) == 3) {
             if (Movement.traverse(NavPath.resolve(FortTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
                 SceneObject tree1 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
@@ -251,17 +252,20 @@ public class ElderTree extends LoopingScript {
                 } else if (tree1 != null) {
                     println("Interacted tree: " + tree1.interact("Chop down"));
                 }
-            } else if (VarManager.getVarbitValue(20603) == 0) {
-                if (Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
-                    SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
-                    if (VarManager.getVarbitValue(20603) == 1) {
-                        println("Teleporting to Draynor Village");
-                        Lodestone.DRAYNOR_VILLAGE.teleport();
-                        //Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate()));
-                    } else if (tree != null) {
-                        println("Interacted tree: " + tree.interact("Chop down"));
-                    }
-                } else if (VarManager.getVarbitValue(20600) == 0) {
+
+            }
+        } else if (VarManager.getVarbitValue(20603) == 0) {
+            if (Movement.traverse(NavPath.resolve(VarrockTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
+                SceneObject tree = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
+                if (VarManager.getVarbitValue(20603) == 1) {
+                    println("Teleporting to Draynor Village");
+                    Lodestone.DRAYNOR_VILLAGE.teleport();
+                    //Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate()));
+                } else if (tree != null) {
+                    println("Interacted tree: " + tree.interact("Chop down"));
+                }
+            }
+        }else if (VarManager.getVarbitValue(20600) == 0) {
                     if (Movement.traverse(NavPath.resolve(FaladorTree.getRandomWalkableCoordinate())) == TraverseEvent.State.FINISHED) {
                         SceneObject tree2 = SceneObjectQuery.newQuery().name("Elder tree").option("Chop down").hidden(false).results().nearest();
                         if (VarManager.getVarbitValue(20600) == 1) {
@@ -272,8 +276,8 @@ public class ElderTree extends LoopingScript {
                         }
                     }
                 }
-            }
-        }
+
+
 
 
 
